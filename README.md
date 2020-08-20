@@ -49,7 +49,7 @@ how to use methods there.
 
 #### Translate
 
-### `createLanguageFile(string $language, string $directory)`
+#### `createLanguageFile(string $language, string $directory)`
 
 This method will create an empty language file in $directory.
 
@@ -66,7 +66,7 @@ $translate->createLanguageFile('de', 'path/to/languages/directory');
 $translate->createLanguageFile(ISOLanguageCodes::LANGUAGE_GERMAN, 'path/to/languages/directory');
 ```
 
-### `setLocale(string $language)`
+#### `setLocale(string $language)`
 
 Set locale language to get translates from that file
 
@@ -83,7 +83,7 @@ $translate->setLocale('fr');
 $translate->setLocale(ISOLanguageCodes::LANGUAGE_FRENCH);
 ```
 
-### `getLanguage(): string`
+#### `getLanguage(): string`
 
 Get translate language that has been set from `setLocale` method.
 
@@ -94,7 +94,7 @@ this method easily.
 $language = $translate->getLanguage();
 ```
 
-### `setTranslateDir(string $directory)`
+#### `setTranslateDir(string $directory)`
 
 Set language directory
 
@@ -104,7 +104,7 @@ Note: Just specify directory not file.
 $translate->setTranslateDir('path_to_languages_directory');
 ```
 
-### `getTranslateFromFile(string $filename, bool $fresh = false): array`
+#### `getTranslateFromFile(string $filename, bool $fresh = false): array`
 
 Get all translates from a language file.
 
@@ -112,7 +112,7 @@ Basically after reading a language file, it will be cached by library
 but if you need to read it another time, pass *true* as $fresh 
 variable value.
 
-### `itIsRTL()`
+#### `itIsRTL()`
 
 You can specify it is a *rtl* language that is using. Purpose of 
 this method is to have specific reaction according to *rtl* in 
@@ -122,7 +122,7 @@ your view.
 $translate->itIsRTL();
 ```
 
-### `isRTL(): bool`
+#### `isRTL(): bool`
 
 Return *true* if language is *rtl* otherwise return *false*.
 
@@ -135,7 +135,7 @@ will be rtl in any condition even if it's not.
 $is_rtl = $translate->isRTL();
 ```
 
-### `translate(string $key, array $value = [])`
+#### `translate(string $key, array $value = [])`
 
 This is the main method to translate to language you specified.
 
@@ -184,7 +184,7 @@ $test_label = $translate->translate('labels.test');
 
 #### ISOLanguageCodes
 
-### `static isInLanguageCode(string $code): bool`
+#### `static isInLanguageCode(string $code): bool`
 
 Check if language is in *ISO 639-1* languages or not.
 
@@ -197,7 +197,7 @@ ISOLanguageCodes::isInLanguageCode(ISOLanguageCodes::LANGUAGE_CZECH);
 ISOLanguageCodes::isInLanguageCode('per');
 ```
 
-### `static isRtlLanguage(string $code): bool`
+#### `static isRtlLanguage(string $code): bool`
 
 Check if a language is rtl or not.
 

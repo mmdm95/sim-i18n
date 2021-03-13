@@ -63,8 +63,11 @@ interface ITranslate
      * Get translated word
      *
      * @param string $key
+     * @param array|string|null $fileOrValue - You can pass translate filename
+     * right here or entire translate directory + filename by entering [file:] prefix
+     * or you can pass translate values array
      * @param array|null $value
      * @return mixed
      */
-    public function translate(string $key, array $value = []);
+    public function translate(string $key, $fileOrValue = null, array $value = []);
 }

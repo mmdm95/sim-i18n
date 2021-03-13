@@ -127,14 +127,31 @@ trait TraitTranslate
     /**
      * {@inheritdoc}
      */
-    public function translate(string $key, array $value = [])
+    public function translate(string $key, $fileOrValue = null, array $value = [])
     {
-        $arr = $this->getTranslateFromFile($this->translate_dir . DIRECTORY_SEPARATOR . $this->translated_file);
+        $dir = $this->translate_dir;
+        $filename = $this->translated_file;
+        if (is_string($fileOrValue)) {
+            $filename = explode(':', $fileOrValue);
+            if (2 <= count($filename) && 'file' === $filename[0]) {
+                array_shift($filename);
+                $dir = '';
+                $filename = implode(':', $filename) . '.php';
+            } else {
+                $filename = $fileOrValue . '.php';
+            }
+        }
+
+        $arr = $this->getTranslateFromFile(trim($dir . DIRECTORY_SEPARATOR . $filename, DIRECTORY_SEPARATOR));
         $translate = ArrayUtil::get($arr, $key);
         if (is_null($translate)) return '';
 
-        if (count($value)) {
-            foreach ($value as $k => $v) {
+        $mapper = $value;
+        if (is_array($fileOrValue)) {
+            $mapper = $fileOrValue;
+        }
+        if (count($mapper)) {
+            foreach ($mapper as $k => $v) {
                 if (is_string($v)) {
                     $translate = str_replace('{' . $k . '}', $v, $translate);
                 }

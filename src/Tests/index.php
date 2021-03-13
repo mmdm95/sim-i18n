@@ -20,5 +20,20 @@ $userName = 'MMDM';
 </p>
 
 <label><?= $translate->translate('labels.test'); ?></label>
+
+<h5>
+    Change filename separately test 1:
+</h5>
+<label><?= $translate->translate('labels.test', 'fa'); ?></label>
+
+<h5>
+    Change filename separately test 2:
+</h5>
+<label><?= $translate->translate('c', 'dir/file', ['user' => $userName]); ?></label>
+
+<h5>
+    Change directory + filename separately:
+</h5>
+<label><?= $translate->translate('greeting', 'file:' . __DIR__ . '/languages2/en', ['user' => $userName]); ?></label>
 </body>
 </html>

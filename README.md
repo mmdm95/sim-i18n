@@ -143,16 +143,23 @@ will be rtl in any condition even if it's not.
 $is_rtl = $translate->isRTL();
 ```
 
-#### `translate(string $key, array $value = [])`
+#### `translate(string $key, $fileOrValue = null, array $value = [])`
 
 This is the main method to translate to language you specified.
 
 $key is the key that sets in language file.
 
-##### Example
+In *$fileOrValue* parameter you can pass translate filename 
+(without specify directory) or directory + filename by adding 
+`file:` prefix to string or if you are happy with previous setting, 
+and need to pass values to translate string, pass it here instead of 
+third parameter.
+
+##### Example 1
 
 If your file has structure like this:
 
+```
 return [
     'current-lang' => 'Current language is: ',
     'greeting' => 'Hello dear <strong>{user}</strong>',
@@ -160,6 +167,7 @@ return [
         'test' => 'This is a test.'
     ]
 ]
+```
 
 you can access a translate like:
 
@@ -188,6 +196,63 @@ $test_label = $translate->translate('labels.test');
 
 // output:
 // This is a test.
+```
+
+##### Example 2
+
+If you have multiple files with some translations like:
+
+`file number 1`:
+
+```
+return [
+    'a1' => 'hello',
+    'b1' => 'hi',
+    'c1' => 'hi {user}'
+]
+```
+
+`file number 2`:
+
+```
+return [
+    'a2' => 'hello again',
+    'b2' => 'hi again',
+    'c2' => 'hi again {user}'
+]
+```
+
+Now to use translation you can do following things:
+
+```php
+// simple usage when you configured directory and filename before
+$translate->translate('a1');
+
+// change them in runtime
+// [this is not so much convenient!]
+$translate
+    ->setTranslateDir('direcoty_to_file_1_or_2')
+    ->setLocale('en_or_other_languages')
+    ->translate('a1_or_a2');
+    
+// above code with parameter
+$translate
+    ->setTranslateDir('direcoty_to_file_1_or_2')
+    ->setLocale('en_or_other_languages')
+    ->translate('c1_or_c2', ['user' => 'MMDM']);
+    
+//===================================================
+    
+// a convenient way to use above code
+// with just change locale filename
+$translate->translate('a1_or_a2', 'en_or_other_languages');
+
+// above code with parameter
+$translate->translate('c1_or_c2', 'en_or_other_languages', ['user' => 'MMDM']);
+    
+// a convenient way to use above code
+// with changing directory + filename
+$translate->translate('a1_or_a2', 'file:directory/en_or_other_languages');
 ```
 
 #### ISOLanguageCodes

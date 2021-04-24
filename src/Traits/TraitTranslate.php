@@ -41,25 +41,25 @@ trait TraitTranslate
 
         $res = true;
         // create language directory is not exists
-        if (!file_exists($directory)) {
-            $res = mkdir($directory, 0774); // Creates the directory
+        if (!\file_exists($directory)) {
+            $res = \mkdir($directory, 0774); // Creates the directory
         }
 
         if ($res) {
             // create language file
             $filename = $directory . DIRECTORY_SEPARATOR . $language . '.php';
-            if (!file_exists($filename)) {
+            if (!\file_exists($filename)) {
                 // open/create file for writing
-                $file = fopen($filename, "w") or die("Unable to open file!");
+                $file = \fopen($filename, "w") or die("Unable to open file!");
                 // add empty content to it
                 $txt = "<?php\n\n";
-                fwrite($file, $txt);
+                \fwrite($file, $txt);
                 $txt = "return [\n\n";
-                fwrite($file, $txt);
+                \fwrite($file, $txt);
                 $txt = "];\n";
-                fwrite($file, $txt);
+                \fwrite($file, $txt);
                 // close opened file
-                fclose($file);
+                \fclose($file);
             }
         }
 
@@ -82,7 +82,7 @@ trait TraitTranslate
     public function setTranslateDir(string $directory)
     {
         $directory = $this->changeSlashes($directory);
-        if (file_exists($directory) && is_dir($directory)) {
+        if (\file_exists($directory) && \is_dir($directory)) {
             $this->translate_dir = $directory;
         }
         return $this;
@@ -93,7 +93,7 @@ trait TraitTranslate
      */
     public function getTranslateFromFile(string $filename, bool $fresh = false): array
     {
-        if (isset($this->resolved_files[$this->language]) && in_array($filename, $this->resolved_files[$this->language]) && !$fresh) {
+        if (isset($this->resolved_files[$this->language]) && \in_array($filename, $this->resolved_files[$this->language]) && !$fresh) {
             return $this->resolved_files[$this->language][$filename];
         }
         return $this->resolveFile($filename);
@@ -131,29 +131,29 @@ trait TraitTranslate
     {
         $dir = $this->translate_dir;
         $filename = $this->translated_file;
-        if (is_string($fileOrValue)) {
-            $filename = explode(':', $fileOrValue);
-            if (2 <= count($filename) && 'file' === $filename[0]) {
-                array_shift($filename);
+        if (\is_string($fileOrValue)) {
+            $filename = \explode(':', $fileOrValue);
+            if (2 <= \count($filename) && 'file' === $filename[0]) {
+                \array_shift($filename);
                 $dir = '';
-                $filename = implode(':', $filename) . '.php';
+                $filename = \implode(':', $filename) . '.php';
             } else {
                 $filename = $fileOrValue . '.php';
             }
         }
 
-        $arr = $this->getTranslateFromFile(trim($dir . DIRECTORY_SEPARATOR . $filename, DIRECTORY_SEPARATOR));
+        $arr = $this->getTranslateFromFile(\rtrim($dir . DIRECTORY_SEPARATOR . $filename, DIRECTORY_SEPARATOR));
         $translate = ArrayUtil::get($arr, $key);
-        if (is_null($translate)) return '';
+        if (\is_null($translate)) return '';
 
         $mapper = $value;
-        if (is_array($fileOrValue)) {
+        if (\is_array($fileOrValue)) {
             $mapper = $fileOrValue;
         }
-        if (count($mapper)) {
+        if (\count($mapper)) {
             foreach ($mapper as $k => $v) {
-                if (is_string($v)) {
-                    $translate = str_replace('{' . $k . '}', $v, $translate);
+                if (\is_string($v)) {
+                    $translate = \str_replace('{' . $k . '}', $v, $translate);
                 }
             }
         }
@@ -167,20 +167,20 @@ trait TraitTranslate
      */
     protected function resolveFile(string $filename): array
     {
-        if (file_exists($filename)) {
+        if (\file_exists($filename)) {
             // sorry I had to concat it with a string to avoid editor's warning :(
             $arr = include $filename . '';
-            if (!is_array($arr)) {
+            if (!\is_array($arr)) {
                 $arr = [];
             }
         } else {
             $arr = [];
         }
 
-        if (!isset($this->resolved_files[$this->language][$filename]) || !is_array($this->resolved_files[$this->language][$filename])) {
+        if (!isset($this->resolved_files[$this->language][$filename]) || !\is_array($this->resolved_files[$this->language][$filename])) {
             $this->resolved_files[$this->language][$filename] = [];
         }
-        $this->resolved_files[$this->language][$filename] = array_merge($this->resolved_files[$this->language], $arr);
+        $this->resolved_files[$this->language][$filename] = \array_merge($this->resolved_files[$this->language], $arr);
 
         return $arr;
     }
@@ -191,9 +191,9 @@ trait TraitTranslate
      */
     protected function changeSlashes($str)
     {
-        $str = str_replace('/', DIRECTORY_SEPARATOR, $str);
-        $str = str_replace('\\', DIRECTORY_SEPARATOR, $str);
-        $str = rtrim($str, DIRECTORY_SEPARATOR);
+        $str = \str_replace('/', DIRECTORY_SEPARATOR, $str);
+        $str = \str_replace('\\', DIRECTORY_SEPARATOR, $str);
+        $str = \rtrim($str, DIRECTORY_SEPARATOR);
         return $str;
     }
 }

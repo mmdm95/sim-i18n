@@ -144,7 +144,7 @@ trait TraitTranslate
 
         $arr = $this->getTranslateFromFile(\rtrim($dir . DIRECTORY_SEPARATOR . $filename, DIRECTORY_SEPARATOR));
         $translate = ArrayUtil::get($arr, $key);
-        if (\is_null($translate)) return '';
+        if (\is_null($translate)) return $key;
 
         $mapper = $value;
         if (\is_array($fileOrValue)) {

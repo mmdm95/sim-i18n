@@ -155,6 +155,8 @@ In *$fileOrValue* parameter you can pass translate filename
 and need to pass values to translate string, pass it here instead of 
 third parameter.
 
+**Note:** If `$key` could not translate, `$key` will return.
+
 ##### Example 1
 
 If your file has structure like this:

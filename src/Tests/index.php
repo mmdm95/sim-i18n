@@ -35,5 +35,10 @@ $userName = 'MMDM';
     Change directory + filename separately:
 </h5>
 <label><?= $translate->translate('greeting', 'file:' . __DIR__ . '/languages2/en', ['user' => $userName]); ?></label>
+
+<h5>
+    Multiple choice translation
+</h5>
+<label><?= $translate->translateChoice('choice', 5); ?></label>
 </body>
 </html>

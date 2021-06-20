@@ -70,4 +70,17 @@ interface ITranslate
      * @return mixed
      */
     public function translate(string $key, $fileOrValue = null, array $value = []);
+
+    /**
+     * Get translated word with pluralization
+     *
+     * @param string $key
+     * @param int $count
+     * @param array|string|null $fileOrValue - You can pass translate filename
+     * right here or entire translate directory + filename by entering [file:] prefix
+     * or you can pass translate values array
+     * @param array|null $value
+     * @return mixed
+     */
+    public function translateChoice(string $key, int $count, $fileOrValue = null, array $value = []);
 }

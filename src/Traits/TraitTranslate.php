@@ -144,21 +144,52 @@ trait TraitTranslate
 
         $arr = $this->getTranslateFromFile(\rtrim($dir . DIRECTORY_SEPARATOR . $filename, DIRECTORY_SEPARATOR));
         $translate = ArrayUtil::get($arr, $key);
-        if (\is_null($translate)) return $key;
+        if (\is_null($translate) || !\is_string($translate)) return $key;
 
         $mapper = $value;
         if (\is_array($fileOrValue)) {
-            $mapper = $fileOrValue;
+            $mapper = \array_merge($value, $fileOrValue);
         }
         if (\count($mapper)) {
             foreach ($mapper as $k => $v) {
-                if (\is_string($v)) {
-                    $translate = \str_replace('{' . $k . '}', $v, $translate);
+                if (\is_scalar($v)) {
+                    $translate = \str_replace('{' . $k . '}', \strval($v), $translate);
                 }
             }
         }
 
         return $translate;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function translateChoice(string $key, int $count, $fileOrValue = null, array $value = [])
+    {
+        $translate = $this->translate($key, $fileOrValue, \array_merge([
+            'count' => $count,
+        ], $value));
+        $translateArr = \explode('|', $translate);
+        foreach ($translateArr as $t) {
+            if (\is_string($t)) {
+                \preg_match('/\{(?:(,\d+)|(\d+,)|(\d+))\}/', $t, $matches);
+                if (\count($matches)) {
+                    $whole = \array_shift($matches);
+                    $matches = \array_filter($matches, function ($val) {
+                        return \trim($val) !== '';
+                    });
+                    $numStr = \array_shift($matches);
+                    $num = \trim($numStr, ',');
+                    if (
+                        ($numStr[0] == ',' && $count < $num) ||
+                        ($numStr[\strlen($numStr) - 1] == ',' && $count >= $num)
+                    ) {
+                        return \trim(\str_replace($whole, '', $t));
+                    }
+                }
+            }
+        }
+        return $key;
     }
 
     /**

@@ -157,6 +157,10 @@ third parameter.
 
 **Note:** If `$key` could not translate, `$key` will return.
 
+#### `translateChoice(string $key, int $count, $fileOrValue = null, array $value = [])`
+
+Exactly like translate method but you can pluralization on it.
+
 ##### Example 1
 
 If your file has structure like this:
@@ -255,6 +259,39 @@ $translate->translate('c1_or_c2', 'en_or_other_languages', ['user' => 'MMDM']);
 // a convenient way to use above code
 // with changing directory + filename
 $translate->translate('a1_or_a2', 'file:directory/en_or_other_languages');
+```
+
+##### Example 3
+
+Assume we have below translation file:
+
+```php
+<?php
+
+return [
+    'choice' => '{0} none|{1} one|{2,} more than one ({count})',
+];
+```
+
+now to get it according to number of items, call 
+`translateChoice` method.
+
+```php
+echo $translate->translateChoice('choice', 4);
+
+// more than one (4)
+```
+
+as you can see we did not pass `count` to translate but it could 
+be used internally.
+
+Also if you pass count as third or forth parameter, it'll be replaced 
+by actual count.
+
+```php
+echo $translate->translateChoice('choice', 4, ['count' => 66]);
+
+// more than one (66)
 ```
 
 #### ISOLanguageCodes
